@@ -2,11 +2,11 @@
     <button on:click={openModal} class="toggle-button">Open Modal</button>
 </div>
 
-<Modal title="Player Panels" bind:open={showModal} outsideclose class="compareModal" size="xl">
-    <Button on:click={toggleView}>
+<Modal title="Player Panels" bind:open={showModal} outsideclose class="compareModal bg-slate-900" size="xl" hideHeader={true}>
+    <Button  on:click={toggleView} class="bg-blue-500">
         {isCombinedView ? 'Switch to Separate Charts' : 'Switch to Combined Chart'}
     </Button>
-    <Button>Dropdown button<ChevronDownOutline class="w-6 h-6 ms-2 text-white dark:text-white" /></Button>
+    <Button class="bg-blue-500">Other Metrics<ChevronDownOutline class="w-6 h-6 ms-2 text-white" /></Button>
     <Dropdown {activeUrl}>
         <DropdownItem on:click={() => handleDropdownItemClick('points')}>Points</DropdownItem>
         <DropdownItem on:click={() => handleDropdownItemClick('assists')}>Assists</DropdownItem>
@@ -17,28 +17,26 @@
         <DropdownItem on:click={() => handleDropdownItemClick('blocks')}>Blocks</DropdownItem>
         <DropdownItem on:click={() => handleDropdownItemClick('turnovers')}>Turnovers</DropdownItem>
     </Dropdown>
-    <div class="minimizable-window">
+    <div class="minimizable-window bg-slate-400">
         {#if !isCombinedView}
             {#each Object.keys(panelPlayers) as index}
                 <div class="panel" id={index}>
-                <h3>Panel {parseInt(index) + 1}</h3>
-                <Button on:click={() => removePlayer(Number(index))}>Remove Player</Button>
-                <ul>
-                    {#each panelPlayers[Number(index)].details as player}
-                    <li>
-                        <h2>{player.firstName} {player.lastName}</h2>
-                        <img src={player.headshot?.href || 'default-image.jpg'} alt={player.headshot?.alt || 'Player headshot'} />
-                        <br />
-                        <p>Position: {player.position.displayName || 'N/A'}</p>
-                        <p>Height: {player.height ? `${Math.floor(player.height / 12)}' ${player.height % 12}"` : 'N/A'}</p>
-                        <p>Weight: {player.weight || 'N/A'}</p>
-                        <p>Points: {panelPlayers[Number(index)].stats[0]}</p>
-                    </li>
-                    <Card>
-                        <Chart options={$options[Number(index)]} />
-                    </Card>
-                    {/each}
-                </ul>
+                    <Button on:click={() => removePlayer(Number(index))} class="bg-blue-500">Remove Player</Button>
+                    <ul>
+                        {#each panelPlayers[Number(index)].details as player}
+                        <li>
+                            <h2>{player.firstName} {player.lastName}</h2>
+                            <img src={player.headshot?.href || 'default-image.jpg'} alt={player.headshot?.alt || 'Player headshot'} />
+                            <br />
+                            <p>Position: {player.position.displayName || 'N/A'}</p>
+                            <p>Height: {player.height ? `${Math.floor(player.height / 12)}' ${player.height % 12}"` : 'N/A'}</p>
+                            <p>Weight: {player.weight || 'N/A'}</p>
+                        </li>
+                        <Card>
+                            <Chart options={$options[Number(index)]} />
+                        </Card>
+                        {/each}
+                    </ul>
                 </div>
             {/each}
         {/if}
@@ -104,7 +102,7 @@
 
 
 <script lang="ts">
-    debugger;//addedd
+    //debugger;//addedd
     import { onMount } from 'svelte';
     import { Chart, Card, A, Dropdown, DropdownItem, DropdownDivider, DropdownHeader, Button, Modal } from 'flowbite-svelte';
     import { UsersGroupOutline, ArrowUpOutline, ChevronDownOutline, ChevronRightOutline } from 'flowbite-svelte-icons';
@@ -545,6 +543,9 @@ export async function getPlayersByTeam(teamId: number): Promise<Player[]> {
 
 
 <style>
+body {
+  background-color: lightblue;
+}
 .search-container {
   margin-bottom: 1rem;
   text-align: center;
@@ -572,7 +573,7 @@ export async function getPlayersByTeam(teamId: number): Promise<Player[]> {
     border: 1px solid #ddd;
     border-radius: 42px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
+    background-color: rgb(24,26,27);
     text-align: center;
     cursor: pointer;
     transition: transform 0.2s ease-in-out;
@@ -580,6 +581,7 @@ export async function getPlayersByTeam(teamId: number): Promise<Player[]> {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    color: lightgray;
 }
 
 .team-card:hover, .player-card:hover {
@@ -643,6 +645,7 @@ export async function getPlayersByTeam(teamId: number): Promise<Player[]> {
     margin: 1rem 0;
     background-color: #f9f9f9;
     overflow-x: auto; /* Enable horizontal scrolling if needed */
+    overflow-y: clip;
 }
 
 .panel {
@@ -681,6 +684,12 @@ export async function getPlayersByTeam(teamId: number): Promise<Player[]> {
     max-width: 900px; /* Set a maximum width */
     height: auto; /* Adjust the height as needed */
     max-height: 90%; /* Set a maximum height */
+}
+
+.modalColor{
+    background-color: #007BFF;
+    color: #ff0000;
+
 }
 
 .combined-chart {
