@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-export let options = writable([
+export const options = writable([
     {
         colors: ['#1A56DB', '#FDBA8C'],
         series: [
